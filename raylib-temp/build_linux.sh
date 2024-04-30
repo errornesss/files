@@ -2,6 +2,6 @@
 
 output="main"
 
-gcc *.c -o $output -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+gcc ./*.c -o $output -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 ./$output
 rm $output
