@@ -2,7 +2,6 @@
 
 #include <stdbool.h>
 
-// better ints ---
 #include <stdint.h>
 
 typedef int8_t i8;
@@ -19,8 +18,6 @@ typedef float f32;
 typedef double f64;
 typedef long double f128;
 
-
-// better static ---
 #define global static
 #define internal static
 #define persist static

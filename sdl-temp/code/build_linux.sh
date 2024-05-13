@@ -1,9 +1,9 @@
 #!/bin/bash
 
-output="game"
+output="../build/game"
 
 mkdir -p ../build
-gcc ./*.c -o ../build/$output -lSDL2 -lSDL2main
-# ../build/$output
+gcc ./*.c -o $output -lSDL2 -lSDL2main
+$output
 # rm $output
 
