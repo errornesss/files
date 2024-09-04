@@ -23,5 +23,7 @@ char* FileToString(const char* pathToFile) {
   fread(string, 1, size, file);
   fclose(file);
 
+  string[size] = '\0';
+
   return string;
 }
