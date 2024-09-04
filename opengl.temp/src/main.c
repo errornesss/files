@@ -89,9 +89,10 @@ i32 main(/* i32 argc, char *argv[] */) {
   }
 
   f32 verticies[] = {
-    0.0f, 0.5f, 0.0f,
-    -0.5f, -0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f
+//  position             colour
+     0.0f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f, 
+    -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f, 
+     0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f 
   };
 
   u32 indicies[] = {
@@ -103,16 +104,20 @@ i32 main(/* i32 argc, char *argv[] */) {
   glGenBuffers(1, &VBO);
   glGenBuffers(1, &EBO);
 
-  glBindVertexArray(VAO);
-
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_STATIC_DRAW);
+
+  glBindVertexArray(VAO);
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(verticies[0]), (void *)0);
+
+  glVertexAttribPointer(0, 3, GL_FLOAT, false, 7 * sizeof(verticies[0]), (void *)0);
   glEnableVertexAttribArray(0);
+
+  glVertexAttribPointer(1, 4, GL_FLOAT, false, 7 * sizeof(verticies[0]), (void *)(3 * sizeof(verticies[0])));
+  glEnableVertexAttribArray(1);
 
   char *vertexShader = FileToString("shaders/shader.vs"); 
   char *fragmentShader = FileToString("shaders/shader.fs"); 
