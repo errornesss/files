@@ -89,13 +89,13 @@ i32 main(/* i32 argc, char *argv[] */) {
   }
 
   f32 verticies[] = {
+    0.0f, 0.5f, 0.0f,
     -0.5f, -0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f,
-    0.0f, 0.5f, 0.0f
+    0.5f, -0.5f, 0.0f
   };
 
   u32 indicies[] = {
-    0, 1, 2
+    0, 1, 2,
   };
 
   u32 VAO, VBO, EBO;
@@ -129,7 +129,7 @@ i32 main(/* i32 argc, char *argv[] */) {
     glClear(GL_COLOR_BUFFER_BIT);
 
     // glDrawArrays(GL_TRIANGLES, 0, 3);
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, sizeof(indicies)/sizeof(indicies[0]), GL_UNSIGNED_INT, 0);
 
     glfwSwapBuffers(window);
     glfwPollEvents();
