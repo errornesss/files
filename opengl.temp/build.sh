@@ -11,7 +11,7 @@ out="main"
 
 mkdir -p bin/
 pushd src/
-gcc -o ../bin/$out *.c include/glad.c -Iinclude/ -lglfw -ldl -lGL
+gcc -o ../bin/$out *.c utils/*.c include/glad.c -Iinclude/ -lglfw -ldl -lGL
 pushd ../bin
 ./$out
 rm $out

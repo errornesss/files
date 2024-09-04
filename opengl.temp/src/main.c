@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 
 #include "include/glad.h"
@@ -105,22 +106,13 @@ i32 main(/* i32 argc, char *argv[] */) {
   glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(verticies[0]), (void *)0);
   glEnableVertexAttribArray(0);
 
-  const char *vertexShader =
-    "#version 460 core\n"
-    "layout (location = 0) in vec4 position;\n"
-    "void main() {\n"
-    " gl_Position = position;\n"
-    "}\0"
-  ; 
-  const char *fragmentShader =
-    "#version 460 core\n"
-    "out vec4 colour;\n"
-    "void main() {\n"
-    " colour = vec4(0.0f, 0.0f, 0.0f, 1.0f);\n"
-    "}\0"
-  ; 
+  char *vertexShader = FileToString("shaders/shader.vs"); 
+  char *fragmentShader = FileToString("shaders/shader.fs"); 
   u32 shader = CreateShader(vertexShader, fragmentShader);
   glUseProgram(shader);
+
+  free(vertexShader);
+  free(fragmentShader);
 
   while (!glfwWindowShouldClose(window)) {
     processInput(window);
@@ -133,6 +125,7 @@ i32 main(/* i32 argc, char *argv[] */) {
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
+
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
   glDeleteProgram(shader);
