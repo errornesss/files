@@ -44,7 +44,7 @@ u32 CreateShader(const char *vertexShader, const char *fragmentShader) {
   glGetProgramiv(program, GL_LINK_STATUS, &success);
   if (!success) {
     glGetProgramInfoLog(program, sizeof(infoLog)/sizeof(infoLog[0]), NULL, infoLog);
-    printf("failed to link shader program\n%s\n", infoLog);
+    printf("failed to link shader program\n%s", infoLog);
   }
 
   glDeleteShader(vs);
