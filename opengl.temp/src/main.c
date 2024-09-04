@@ -7,6 +7,51 @@
 #include "utils/utils.h"
 #include "config.h"
 
+u32 CompileShader(u32 type, const char *source) {
+  u32 id = glCreateShader(type);
+  glShaderSource(id, 1, &source, NULL);
+  glCompileShader(id);
+
+  i32 success;
+  const char *typeStr;
+  switch (type) {
+    case GL_VERTEX_SHADER: { typeStr = "vertex"; } break;
+    case GL_FRAGMENT_SHADER: { typeStr = "fragment"; } break;
+  }
+  char infoLog[512];
+  glGetShaderiv(id, GL_COMPILE_STATUS, &success);
+  if (!success) {
+    glGetShaderInfoLog(id, sizeof(infoLog)/sizeof(infoLog[0]), NULL, infoLog);
+    printf("%s shader failed to compile\n%s\n", typeStr, infoLog);
+  }
+
+  return id;
+}
+
+u32 CreateShader(const char *vertexShader, const char *fragmentShader) {
+  u32 program = glCreateProgram();
+  u32 vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
+  u32 fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
+
+  glAttachShader(program, vs);
+  glAttachShader(program, fs);
+  glLinkProgram(program);
+  glValidateProgram(program);
+
+  i32 success;
+  char infoLog[512];
+  glGetProgramiv(program, GL_LINK_STATUS, &success);
+  if (!success) {
+    glGetProgramInfoLog(program, sizeof(infoLog)/sizeof(infoLog[0]), NULL, infoLog);
+    printf("failed to link shader program\n%s\n", infoLog);
+  }
+
+  glDeleteShader(vs);
+  glDeleteShader(fs);
+
+  return program;
+}
+
 void framebuffer_size_callback(GLFWwindow *window, i32 width, i32 height) {
   glViewport(0, 0, width, height);
 }
@@ -42,16 +87,55 @@ i32 main(/* i32 argc, char *argv[] */) {
     return -1;
   }
 
+  f32 verticies[] = {
+    -0.5f, -0.5f, 0.0f,
+    0.5f, -0.5f, 0.0f,
+    0.0f, 0.5f, 0.0f
+  };
+
+  u32 VBO, VAO;
+  glGenVertexArrays(1, &VAO);
+  glGenBuffers(1, &VBO);
+
+  glBindVertexArray(VAO);
+  glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+  glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_STATIC_DRAW);
+
+  glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(verticies[0]), (void *)0);
+  glEnableVertexAttribArray(0);
+
+  const char *vertexShader =
+    "#version 460 core\n"
+    "layout (location = 0) in vec4 position;\n"
+    "void main() {\n"
+    " gl_Position = position;\n"
+    "}\0"
+  ; 
+  const char *fragmentShader =
+    "#version 460 core\n"
+    "out vec4 colour;\n"
+    "void main() {\n"
+    " colour = vec4(0.0f, 0.0f, 0.0f, 1.0f);\n"
+    "}\0"
+  ; 
+  u32 shader = CreateShader(vertexShader, fragmentShader);
+  glUseProgram(shader);
+
   while (!glfwWindowShouldClose(window)) {
     processInput(window);
 
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
-
+  glDeleteVertexArrays(1, &VAO);
+  glDeleteBuffers(1, &VBO);
+  glDeleteProgram(shader);
   glfwTerminate();
   return 0;
 }
