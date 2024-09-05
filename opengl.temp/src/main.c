@@ -72,7 +72,7 @@ i32 main(/* i32 argc, char *argv[] */) {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  // glfwWindowHint(GLFW_RESIZABLE, false);
+  glfwWindowHint(GLFW_RESIZABLE, false);
 
   GLFWwindow *window = glfwCreateWindow(WID, HEI, "OpenGL Template", NULL, NULL);
   if (!window) {
@@ -112,15 +112,14 @@ i32 main(/* i32 argc, char *argv[] */) {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
 
-
   glVertexAttribPointer(0, 3, GL_FLOAT, false, 7 * sizeof(verticies[0]), (void *)0);
   glEnableVertexAttribArray(0);
 
   glVertexAttribPointer(1, 4, GL_FLOAT, false, 7 * sizeof(verticies[0]), (void *)(3 * sizeof(verticies[0])));
   glEnableVertexAttribArray(1);
 
-  char *vertexShader = FileToString("shaders/shader.vs"); 
-  char *fragmentShader = FileToString("shaders/shader.fs"); 
+  char *vertexShader = FileToString("../res/shaders/shader.vs"); 
+  char *fragmentShader = FileToString("../res/shaders/shader.fs"); 
   u32 shader = CreateShader(vertexShader, fragmentShader);
   glUseProgram(shader);
 
