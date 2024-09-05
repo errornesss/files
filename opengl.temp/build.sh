@@ -14,4 +14,4 @@ pushd src/
 gcc -o ../bin/$out *.c utils/*.c include/glad.c -Iinclude/ -lglfw -ldl -lGL
 pushd ../bin
 ./$out
-rm $out
+# rm $out
