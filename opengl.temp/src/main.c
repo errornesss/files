@@ -104,10 +104,10 @@ i32 main(/* i32 argc, char *argv[] */) {
   glGenBuffers(1, &VBO);
   glGenBuffers(1, &EBO);
 
+  glBindVertexArray(VAO);
+
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_STATIC_DRAW);
-
-  glBindVertexArray(VAO);
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
