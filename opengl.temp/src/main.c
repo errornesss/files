@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 #include "include/glad.h"
-#include "include/glfw3.h"
+#include "include/glfw.h"
 
 #include "utils/utils.h"
 #include "config.h"
@@ -72,7 +72,7 @@ i32 main(/* i32 argc, char *argv[] */) {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  glfwWindowHint(GLFW_RESIZABLE, false);
+  // glfwWindowHint(GLFW_RESIZABLE, false);
 
   GLFWwindow *window = glfwCreateWindow(WID, HEI, "OpenGL Template", NULL, NULL);
   if (!window) {
@@ -92,7 +92,7 @@ i32 main(/* i32 argc, char *argv[] */) {
 //  position             colour
      0.0f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f, 
     -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f, 
-     0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f 
+     0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f, 
   };
 
   u32 indicies[] = {
@@ -126,6 +126,8 @@ i32 main(/* i32 argc, char *argv[] */) {
 
   free(vertexShader);
   free(fragmentShader);
+
+  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
   while (!glfwWindowShouldClose(window)) {
     processInput(window);
