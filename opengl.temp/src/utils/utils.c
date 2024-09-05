@@ -3,10 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char* FileToString(const char* pathToFile) {
-  FILE *file = fopen(pathToFile, "r");
+char* FileToString(const char *source) {
+  FILE *file = fopen(source, "r");
   if (file == NULL) {
-    printf("failed to open %s\n", pathToFile);
+    printf("failed to open %s\n", source);
     return NULL;
   }
 
