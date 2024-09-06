@@ -16,8 +16,8 @@ u32 CompileShader(u32 type, const char *source) {
   i32 success;
   const char *typeStr;
   switch (type) {
-    case GL_VERTEX_SHADER: { typeStr = "vertex"; } break;
-    case GL_FRAGMENT_SHADER: { typeStr = "fragment"; } break;
+    case GL_VERTEX_SHADER: typeStr = "vertex"; break;
+    case GL_FRAGMENT_SHADER: typeStr = "fragment"; break;
   }
   char infoLog[512];
   glGetShaderiv(id, GL_COMPILE_STATUS, &success);
@@ -89,7 +89,7 @@ i32 main(/* i32 argc, char *argv[] */) {
   }
 
   f32 verticies[] = {
-//  position             colour
+//  | position           | colour
      0.0f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f, 
     -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f, 
      0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f, 
@@ -105,11 +105,10 @@ i32 main(/* i32 argc, char *argv[] */) {
   glGenBuffers(1, &EBO);
 
   glBindVertexArray(VAO);
-
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_STATIC_DRAW);
-
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+  glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_STATIC_DRAW);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
 
   glVertexAttribPointer(0, 3, GL_FLOAT, false, 7 * sizeof(verticies[0]), (void *)0);
@@ -131,7 +130,7 @@ i32 main(/* i32 argc, char *argv[] */) {
   while (!glfwWindowShouldClose(window)) {
     processInput(window);
 
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     // glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -143,6 +142,7 @@ i32 main(/* i32 argc, char *argv[] */) {
 
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
+  glDeleteBuffers(1, &EBO);
   glDeleteProgram(shader);
   glfwTerminate();
   return 0;
