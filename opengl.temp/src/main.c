@@ -57,7 +57,7 @@ void framebuffer_size_callback(GLFWwindow *window, i32 width, i32 height) {
   glViewport(0, 0, width, height);
 }
 
-void processInput(GLFWwindow *window) {
+void ProcessInput(GLFWwindow *window) {
   /* if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) 
     glfwSetWindowShouldClose(window, true); */
 }
@@ -113,7 +113,6 @@ i32 main(/* i32 argc, char *argv[] */) {
 
   glVertexAttribPointer(0, 3, GL_FLOAT, false, 7 * sizeof(verticies[0]), (void *)0);
   glEnableVertexAttribArray(0);
-
   glVertexAttribPointer(1, 4, GL_FLOAT, false, 7 * sizeof(verticies[0]), (void *)(3 * sizeof(verticies[0])));
   glEnableVertexAttribArray(1);
 
@@ -128,7 +127,7 @@ i32 main(/* i32 argc, char *argv[] */) {
   // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
   while (!glfwWindowShouldClose(window)) {
-    processInput(window);
+    ProcessInput(window);
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);

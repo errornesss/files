@@ -1,8 +1,8 @@
 #version 460 core
 
-out vec4 fragColour;
 in vec4 ourColour;
+out vec4 fragColour;
 
 void main() {
-  fragColour = vec4(ourColour.xyz, 0.0f);
+  fragColour = ourColour;
 }
