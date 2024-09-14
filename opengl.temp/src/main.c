@@ -5,6 +5,8 @@
 #include "include/glad.h"
 #include "include/glfw.h"
 
+#include "include/stb_image.h"
+
 #include "utils/utils.h"
 #include "config.h"
 
