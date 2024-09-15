@@ -91,10 +91,10 @@ i32 main(/* i32 argc, char *argv[] */) {
   }
 
   f32 verticies[] = {
-//  | position           | colour
-     0.0f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f, 
-    -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f, 
-     0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f, 
+//  | position           | colour                 | tex coord
+     0.0f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f,  0.5f, 1.0f,
+    -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+     0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f,  1.0f, 0.0f
   };
 
   u32 indicies[] = {
@@ -113,10 +113,26 @@ i32 main(/* i32 argc, char *argv[] */) {
   glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_STATIC_DRAW);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, false, 7 * sizeof(verticies[0]), (void *)0);
+  u8 sov = 9 * sizeof(f32); // size of vertex 
+  glVertexAttribPointer(0, 3, GL_FLOAT, false, sov, (void *)0);
   glEnableVertexAttribArray(0);
-  glVertexAttribPointer(1, 4, GL_FLOAT, false, 7 * sizeof(verticies[0]), (void *)(3 * sizeof(verticies[0])));
+  glVertexAttribPointer(1, 4, GL_FLOAT, false, sov, (void *)(3 * sizeof(f32)));
   glEnableVertexAttribArray(1);
+  glVertexAttribPointer(2, 2, GL_FLOAT, false, sov, (void *)(7 * sizeof(f32)));
+  glEnableVertexAttribArray(2);
+
+  u32 texture;
+  glGenTextures(1, &texture);
+  glBindTexture(GL_TEXTURE_2D, texture);
+  i32 width, height, nrChannels;
+  uchar *data = stbi_load("../res/textures/wall.jpg", &width, &height, &nrChannels, 0);
+  if (data) {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+  } else {
+    printf("failed to load texture\n");
+  }
+  stbi_image_free(data);
 
   char *vertexShader = FileToString("../res/shaders/shader.vs"); 
   char *fragmentShader = FileToString("../res/shaders/shader.fs"); 
@@ -135,7 +151,7 @@ i32 main(/* i32 argc, char *argv[] */) {
     glClear(GL_COLOR_BUFFER_BIT);
 
     // glDrawArrays(GL_TRIANGLES, 0, 3);
-    glDrawElements(GL_TRIANGLES, sizeof(indicies)/sizeof(indicies[0]), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, sizeof(indicies)/sizeof(u32), GL_UNSIGNED_INT, 0);
 
     glfwSwapBuffers(window);
     glfwPollEvents();
