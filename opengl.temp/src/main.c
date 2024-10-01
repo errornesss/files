@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <math.h>
 
 #include "include/glad.h"
 #include "include/glfw.h"
@@ -24,7 +25,7 @@ u32 CompileShader(u32 type, const char *source) {
   char infoLog[512];
   glGetShaderiv(id, GL_COMPILE_STATUS, &success);
   if (!success) {
-    glGetShaderInfoLog(id, sizeof(infoLog)/sizeof(infoLog[0]), NULL, infoLog);
+    glGetShaderInfoLog(id, sizeof(infoLog), NULL, infoLog);
     printf("%s shader failed to compile\n%s\n", typeStr, infoLog);
   }
 
@@ -45,7 +46,7 @@ u32 CreateShader(const char *vertexShader, const char *fragmentShader) {
   char infoLog[512];
   glGetProgramiv(program, GL_LINK_STATUS, &success);
   if (!success) {
-    glGetProgramInfoLog(program, sizeof(infoLog)/sizeof(infoLog[0]), NULL, infoLog);
+    glGetProgramInfoLog(program, sizeof(infoLog), NULL, infoLog);
     printf("failed to link shader program\n%s", infoLog);
   }
 
@@ -90,15 +91,29 @@ i32 main(/* i32 argc, char *argv[] */) {
     return -1;
   }
 
+  char *vertexShader = FileToString("../res/shaders/shader.vs"); 
+  char *fragmentShader = FileToString("../res/shaders/shader.fs"); 
+  u32 shader = CreateShader(vertexShader, fragmentShader);
+  glUseProgram(shader);
+
+  free(vertexShader);
+  free(fragmentShader);
+
   f32 verticies[] = {
 //  | position           | colour                 | tex coord
-     0.0f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f,  0.5f, 1.0f,
+    //  0.0f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f,  0.5f, 1.0f,
+    // -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+    //  0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+
+     0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+    -0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f,  0.0f, 1.0f,
     -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f,  0.0f, 0.0f,
-     0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f,  1.0f, 0.0f
+     0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f,  1.0f, 0.0f,
   };
 
   u32 indicies[] = {
     0, 1, 2,
+    2, 3, 0,
   };
 
   u32 VAO, VBO, EBO;
@@ -125,6 +140,7 @@ i32 main(/* i32 argc, char *argv[] */) {
   glGenTextures(1, &texture);
   glBindTexture(GL_TEXTURE_2D, texture);
   i32 width, height, nrChannels;
+  stbi_set_flip_vertically_on_load(true);
   uchar *data = stbi_load("../res/textures/wall.jpg", &width, &height, &nrChannels, 0);
   if (data) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -134,21 +150,22 @@ i32 main(/* i32 argc, char *argv[] */) {
   }
   stbi_image_free(data);
 
-  char *vertexShader = FileToString("../res/shaders/shader.vs"); 
-  char *fragmentShader = FileToString("../res/shaders/shader.fs"); 
-  u32 shader = CreateShader(vertexShader, fragmentShader);
-  glUseProgram(shader);
-
-  free(vertexShader);
-  free(fragmentShader);
-
   // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+  i32 vertexColourLocation = glGetUniformLocation(shader, "uCol");
 
   while (!glfwWindowShouldClose(window)) {
     ProcessInput(window);
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+  
+    {
+      f32 colr = 0.5f + 0.5f * cos(glfwGetTime());
+      f32 colg = 0.5f + 0.5f * cos(glfwGetTime() + 2);
+      f32 colb = 0.5f + 0.5f * cos(glfwGetTime() + 4);
+      glUniform4f(vertexColourLocation, colr, colg, colb, 1.0f);
+    }
 
     // glDrawArrays(GL_TRIANGLES, 0, 3);
     glDrawElements(GL_TRIANGLES, sizeof(indicies)/sizeof(u32), GL_UNSIGNED_INT, 0);
@@ -160,7 +177,9 @@ i32 main(/* i32 argc, char *argv[] */) {
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
   glDeleteBuffers(1, &EBO);
+  glDeleteTextures(1, &texture);
   glDeleteProgram(shader);
+
   glfwTerminate();
   return 0;
 }
