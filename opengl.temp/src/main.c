@@ -61,8 +61,8 @@ void framebuffer_size_callback(GLFWwindow *window, i32 width, i32 height) {
 }
 
 void ProcessInput(GLFWwindow *window) {
-  /* if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) 
-    glfwSetWindowShouldClose(window, true); */
+  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) 
+    glfwSetWindowShouldClose(window, true);
 }
 
 i32 main(/* i32 argc, char *argv[] */) {
@@ -99,21 +99,51 @@ i32 main(/* i32 argc, char *argv[] */) {
   free(vertexShader);
   free(fragmentShader);
 
-  f32 verticies[] = {
-//  | position           | colour                 | tex coord
-    //  0.0f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f,  0.5f, 1.0f,
-    // -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f,  0.0f, 0.0f,
-    //  0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+  glEnable(GL_DEPTH_TEST);
 
-     0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-    -0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f,  0.0f, 1.0f,
-    -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f,  0.0f, 0.0f,
-     0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+/*
+  f32 verticies[] = {
+//  | position            | colour                 | texcoord
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+  };
+*/
+
+  f32 verticies[] = {
+//  | position            | texcoord
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+
+     0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+    -0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+     0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
   };
 
   u32 indicies[] = {
-    0, 1, 2,
-    2, 3, 0,
+    0, 1, 2, 2, 3, 0,
+    4, 5, 6, 6, 7, 4,
+    8, 9, 10, 10, 11, 9,
+    12, 13, 14, 14, 15, 13,
   };
 
   u32 VAO, VBO, EBO;
@@ -128,45 +158,63 @@ i32 main(/* i32 argc, char *argv[] */) {
   glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_STATIC_DRAW);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
 
-  u8 sov = 9 * sizeof(f32); // size of vertex 
+  u8 sov = 5 * sizeof(f32); // size of vertex 
   glVertexAttribPointer(0, 3, GL_FLOAT, false, sov, (void *)0);
   glEnableVertexAttribArray(0);
-  glVertexAttribPointer(1, 4, GL_FLOAT, false, sov, (void *)(3 * sizeof(f32)));
+  // glVertexAttribPointer(1, 4, GL_FLOAT, false, sov, (void *)(3 * sizeof(f32)));
+  // glEnableVertexAttribArray(1);
+  glVertexAttribPointer(1, 2, GL_FLOAT, false, sov, (void *)(3 * sizeof(f32)));
   glEnableVertexAttribArray(1);
-  glVertexAttribPointer(2, 2, GL_FLOAT, false, sov, (void *)(7 * sizeof(f32)));
-  glEnableVertexAttribArray(2);
 
-  u32 texture;
-  glGenTextures(1, &texture);
-  glBindTexture(GL_TEXTURE_2D, texture);
-  i32 width, height, nrChannels;
   stbi_set_flip_vertically_on_load(true);
-  uchar *data = stbi_load("../res/textures/wall.jpg", &width, &height, &nrChannels, 0);
+  u32 texture0, texture1;
+  glGenTextures(1, &texture0);
+  glBindTexture(GL_TEXTURE_2D, texture0);
+  i32 width, height, nrChannels;
+  uchar *data = stbi_load("../res/textures/container.jpg", &width, &height, &nrChannels, 0);
   if (data) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
   } else {
-    printf("failed to load texture\n");
+    printf("failed to load texture1\n");
   }
   stbi_image_free(data);
 
-  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  glGenTextures(1, &texture1);
+  glBindTexture(GL_TEXTURE_2D, texture1);
+  data = stbi_load("../res/textures/awesomeface.png", &width, &height, &nrChannels, 0);
+  if (data) {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+  } else {
+    printf("failed to load texture2\n");
+  }
+  stbi_image_free(data);
 
-  i32 vertexColourLocation = glGetUniformLocation(shader, "uCol");
+  glUniform1i(glGetUniformLocation(shader, "texture0"), 0);
+  glUniform1i(glGetUniformLocation(shader, "texture1"), 1);
+
+  mat4 transform;
+  glm_mat4_identity(transform);
+  u32 transformLoc = glGetUniformLocation(shader, "transform");
+  glm_scale_uni(transform, 0.5f);
+
+  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
   while (!glfwWindowShouldClose(window)) {
     ProcessInput(window);
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-  
-    {
-      f32 colr = 0.5f + 0.5f * cos(glfwGetTime());
-      f32 colg = 0.5f + 0.5f * cos(glfwGetTime() + 2);
-      f32 colb = 0.5f + 0.5f * cos(glfwGetTime() + 4);
-      glUniform4f(vertexColourLocation, colr, colg, colb, 1.0f);
-    }
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    glm_rotate(transform, glm_rad(0.25), (vec3){1, 0, 0});
+    glUniformMatrix4fv(transformLoc, 1, false, transform[0]);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture0);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture1);
+  
     // glDrawArrays(GL_TRIANGLES, 0, 3);
     glDrawElements(GL_TRIANGLES, sizeof(indicies)/sizeof(u32), GL_UNSIGNED_INT, 0);
 
@@ -177,7 +225,10 @@ i32 main(/* i32 argc, char *argv[] */) {
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
   glDeleteBuffers(1, &EBO);
-  glDeleteTextures(1, &texture);
+
+  glDeleteTextures(1, &texture0);
+  glDeleteTextures(1, &texture1);
+
   glDeleteProgram(shader);
 
   glfwTerminate();
