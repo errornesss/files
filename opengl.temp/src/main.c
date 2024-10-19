@@ -128,14 +128,19 @@ i32 main(/* i32 argc, char *argv[] */) {
     -0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
     -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 
-    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
      0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
      0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
      0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+
+    -0.5f,  0.5f, -0.5f,  0.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+
+    -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
      0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
   };
 
@@ -144,6 +149,8 @@ i32 main(/* i32 argc, char *argv[] */) {
     4, 5, 6, 6, 7, 4,
     8, 9, 10, 10, 11, 9,
     12, 13, 14, 14, 15, 13,
+    16, 17, 18, 18, 19, 17,
+    20, 21, 22, 22, 23, 21,
   };
 
   u32 VAO, VBO, EBO;
@@ -207,7 +214,7 @@ i32 main(/* i32 argc, char *argv[] */) {
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glm_rotate(transform, glm_rad(0.25), (vec3){1, 0, 0});
+    glm_rotate(transform, glm_rad(0.5f), (vec3){sin(glfwGetTime()), cos(glfwGetTime()), 1});
     glUniformMatrix4fv(transformLoc, 1, false, transform[0]);
 
     glActiveTexture(GL_TEXTURE0);
