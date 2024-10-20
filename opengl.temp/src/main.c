@@ -77,7 +77,7 @@ i32 main(/* i32 argc, char *argv[] */) {
 
   glfwWindowHint(GLFW_RESIZABLE, false);
 
-  GLFWwindow *window = glfwCreateWindow(WID, HEI, "OpenGL Template", NULL, NULL);
+  GLFWwindow *window = glfwCreateWindow(WID, HEI, TITLE, NULL, NULL);
   if (!window) {
     printf("failed to create window\n");
     glfwTerminate();

@@ -4,3 +4,4 @@
 
 const u32 WID = 640;
 const u32 HEI = WID;
+const char TITLE[] = "OpenGL Template";
