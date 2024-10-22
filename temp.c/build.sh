@@ -1,17 +1,11 @@
 #!/bin/bash
 
-pushd() {
-  command pushd "$@" > /dev/null
-}
-popd() {
-  command popd "$@" > /dev/null
-}
-
+cc="zig cc"
 out="main"
 
 mkdir -p bin/
-pushd src/
-gcc *.c -o ../bin/$out
-pushd ../bin
+cd src/
+$cc *.c -o ../bin/$out
+cd ../bin
 ./$out
 rm $out
