@@ -201,11 +201,6 @@ i32 main(/* i32 argc, char *argv[] */) {
   glUniform1i(glGetUniformLocation(shader, "texture0"), 0);
   glUniform1i(glGetUniformLocation(shader, "texture1"), 1);
 
-  mat4 transform;
-  glm_mat4_identity(transform);
-  u32 transformLoc = glGetUniformLocation(shader, "transform");
-  glm_scale_uni(transform, 0.5f);
-
   // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
   while (!glfwWindowShouldClose(window)) {
@@ -214,7 +209,12 @@ i32 main(/* i32 argc, char *argv[] */) {
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glm_rotate(transform, glm_rad(0.5f), (vec3){sin(glfwGetTime()), cos(glfwGetTime()), 1});
+    mat4 transform;
+    glm_mat4_identity(transform);
+    glm_scale_uni(transform, 0.5f);
+    glm_rotate(transform, PI/2, (vec3){-cos(glfwGetTime()), -sin(glfwGetTime()), -1});
+    glm_translate(transform, (vec3){-cos(glfwGetTime())/2, -sin(glfwGetTime())/2, 0});
+    u32 transformLoc = glGetUniformLocation(shader, "transform");
     glUniformMatrix4fv(transformLoc, 1, false, transform[0]);
 
     glActiveTexture(GL_TEXTURE0);
