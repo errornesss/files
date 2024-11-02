@@ -3,10 +3,10 @@
 #include <stdbool.h>
 #include <math.h>
 
-#include "../lib/glad.h"
-#include "../lib/glfw.h"
-#include "../lib/cglm.h"
-#include "../lib/stb.h"
+#include "../head/glad.h"
+#include "../head/glfw.h"
+#include "../head/cglm.h"
+#include "../head/stb.h"
 
 #include "utils/utils.h"
 #include "config.h"
@@ -208,14 +208,6 @@ i32 main(/* i32 argc, char *argv[] */) {
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    /* mat4 transform;
-    glm_mat4_identity(transform);
-    glm_scale_uni(transform, 0.5f);
-    glm_rotate(transform, glfwGetTime(), (vec3){0.0f, 1.0f, 0.0f});
-    glm_translate(transform, (vec3){cos(glfwGetTime())/2, sin(glfwGetTime())/2, 0});
-    u32 transformLoc = glGetUniformLocation(shader, "transform");
-    glUniformMatrix4fv(transformLoc, 1, false, transform[0]); */
 
     mat4 model, view, projection;
     glm_mat4_identity(model);
