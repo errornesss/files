@@ -3,10 +3,10 @@
 #include <stdbool.h>
 #include <math.h>
 
-#include "../head/glad.h"
-#include "../head/glfw.h"
-#include "../head/cglm.h"
-#include "../head/stb.h"
+#include "../lib/glad.h"
+#include "../lib/glfw.h"
+#include "../lib/cglm.h"
+#include "../lib/stb.h"
 
 #include "utils/utils.h"
 #include "config.h"
