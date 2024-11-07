@@ -2,7 +2,7 @@
 
 cc="zig cc"
 out="main"
-incsrc="lib/glad/glad.c lib/stb/stb_image.c"
+incsrc="include/glad/glad.c include/stb/stb_image.c"
 
 # mkdir -p bin/
 # cd src/
