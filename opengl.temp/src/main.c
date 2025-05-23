@@ -3,10 +3,10 @@
 #include <stdbool.h>
 #include <math.h>
 
-#include "../include/glad.h"
-#include "../include/glfw.h"
-#include "../include/cglm.h"
-#include "../include/stb.h"
+#include "../dep/glad.h"
+#include "../dep/glfw.h"
+#include "../dep/cglm.h"
+#include "../dep/stb.h"
 
 #include "utils/utils.h"
 #include "config.h"
@@ -201,7 +201,7 @@ i32 main(/* i32 argc, char *argv[] */) {
   glUniform1i(glGetUniformLocation(shader, "texture0"), 0);
   glUniform1i(glGetUniformLocation(shader, "texture1"), 1);
 
-  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
   while (!glfwWindowShouldClose(window)) {
     ProcessInput(window);
@@ -209,10 +209,11 @@ i32 main(/* i32 argc, char *argv[] */) {
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    mat4 model, view, projection;
-    glm_mat4_identity(model);
-    glm_mat4_identity(view);
-    glm_mat4_identity(projection);
+    // mat4 model = GLM_MAT4_INDENTITY, view = GLM_MAT4_IDENTITY, projection = GLM_MAT4_IDENTITY;
+    mat4
+      model = GLM_MAT4_IDENTITY,
+      view = GLM_MAT4_IDENTITY,
+      projection = GLM_MAT4_IDENTITY;
     glm_rotate(model, glfwGetTime() * PI/2, (vec3){1.0f, 1.0f, 1.0f});
     glm_translate(view, (vec3){0.0f, 0.0f, -3.0f});
     glm_scale_uni(view, 1.0f);
